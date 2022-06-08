@@ -5,12 +5,25 @@ import Typography from '@mui/material/Typography';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Post } from './pages/Post';
 
+import { makeStyles } from '@mui/styles';
+
+
+const useStyles = makeStyles((theme) => {
+    return {
+        root: {
+            width: "100%",
+            backgroundColor: 'blue'
+        }
+    }
+});
+
 
 function App() {
+  const classes = useStyles({})
   return (
     <div className="App">
       <AppBar position="fixed">
-        <Toolbar>
+        <Toolbar className={classes.root}>
           <Typography variant="title" color="inherit">
             JSON Placeholder Post List
           </Typography>
