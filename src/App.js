@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => {
     return {
         root: {
             width: "100%",
-            backgroundColor: 'black'
+            backgroundColor: 'blue'
         }
     }
 });
