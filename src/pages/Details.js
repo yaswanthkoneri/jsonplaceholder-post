@@ -6,6 +6,12 @@ import ListItemText from "@mui/material/ListItemText";
 import { makeStyles } from '@mui/styles';
 import { useParams } from "react-router-dom";
 import { Comments } from "../components/Comments";
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 
 
 const useStyles = makeStyles((theme) => {
@@ -74,45 +80,27 @@ export const Details = (props) => {
         return response;
     }
     return (
-        <>
-        <Grid
-            container
-            direction="row"
-            justify="center"
-            alignItems="baseline"
-            spacing={24}
-            className={classes.grid}
-        >
-            <Grid item xs={6}>
-                <div 
-                className={classes.root}
-                >
+        <div>
+        <Paper style={{maxHeight: 725, overflow: 'auto', display: 'flex', justifyContent:'center'}} elevation={3}>
                     <List component="nav">
                         {post && Array.isArray(post) && post.length > 0 && post.map((post, id) => (
-                            <div key={id}>
-                                <ListItem
-                                    button
-                                    divider
-                                    onClick={(e) => console.log(e)}
-                                >
-                                    <ListItemText
-                                        primary={post.title}
-                                        secondary={"Id: " + post.id}
-                                    />
-                                                  <ListItemText
-                                        primary={post.body}
-                                    />
-                                </ListItem>
-                            </div>
+                                       <Card sx={{ maxWidth: 600, marginTop: 5 }}>
+                                       <CardContent>
+                                         <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
+                                          {post.id} - {post.title}
+                                         </Typography>
+                                         <Typography paragraph color="text.secondary">
+                                           {post.body}
+                                         </Typography>
+                                       </CardContent>
+                                       </Card>
                         ))}
                     </List>
-                </div>
-            </Grid>
-        </Grid>
-        <div>
+        {/* <div>
             Comments
-        </div>
+        </div> */}
         <Comments id={id}/>
-        </>
+        </Paper>
+        </div>
     )
 }

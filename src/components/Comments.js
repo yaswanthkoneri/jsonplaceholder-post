@@ -9,6 +9,7 @@ import { CommentInput } from "./CommentInput";
 import EditIcon from '@mui/icons-material/Edit';
 import Delete from '@mui/icons-material/Delete';
 import { Button } from "@mui/material";
+import Paper from '@mui/material/Paper';
 
 
 const useStyles = makeStyles((theme) => {
@@ -45,7 +46,7 @@ export const Comments = (props) => {
     const { id } = props
     const classes = useStyles({});
 
-    async function fetchPosts() {
+    async function fetchComments() {
         let header = new Headers({
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'multipart/form-data'
@@ -64,8 +65,7 @@ export const Comments = (props) => {
     }
 
     useEffect(() => {
-        console.log("inside")
-        fetchPosts()
+        fetchComments()
     }, [id])
 
 
@@ -78,10 +78,7 @@ export const Comments = (props) => {
         return response;
     }
     return (
-        <div
-            className={classes.root}
-        >
-            {/* {JSON.stringify(comments)} */}
+        <Paper style={{maxHeight: 725, overflow: 'auto', display: 'flex', justifyContent:'center'}} elevation={3}>
             <List component="nav">
                 {comments && Array.isArray(comments) && comments.length > 0 && comments.map((comment, id) => (
                     <div key={id}>
@@ -92,7 +89,7 @@ export const Comments = (props) => {
                         >
                             <ListItemText
                                 primary={comment.name}
-                                secondary={"email: " + comment.email}
+                                secondary={comment.email}
                             />
                             {!comment.editing && <ListItemText
                                 primary={comment.body}
@@ -132,7 +129,7 @@ export const Comments = (props) => {
                     </div>
                 ))}
             </List>
-            <CommentInput />
-        </div>
+            {/* <CommentInput /> */}
+        </Paper>
     )
 }
