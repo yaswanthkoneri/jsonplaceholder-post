@@ -4,7 +4,9 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { makeStyles } from '@mui/styles';
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { Comments } from "../components/Comments";
+
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -34,11 +36,10 @@ const useStyles = makeStyles((theme) => {
 });
 
 
-export const Post = (props) => {
-    const [posts, setPosts] = useState([])
+export const Details = (props) => {
+    const [post, setPost] = useState([])
+    const {id} = useParams();
     const classes = useStyles({});
-    let navigate = useNavigate();
-
 
     async function fetchPosts() {
         let header = new Headers({
@@ -50,9 +51,9 @@ export const Post = (props) => {
             header: header
         };
         try {
-            let res = await fetch("https://jsonplaceholder.typicode.com/posts/", sendData)
+            let res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, sendData)
             res = await res.json()
-            setPosts(res)
+            setPost([res])
         } catch (e) {
             handleErrors(e)
         }
@@ -61,7 +62,7 @@ export const Post = (props) => {
     useEffect(() => {
         console.log("inside")
         fetchPosts()
-    }, [])
+    }, [id])
 
 
 
@@ -73,6 +74,7 @@ export const Post = (props) => {
         return response;
     }
     return (
+        <>
         <Grid
             container
             direction="row"
@@ -82,20 +84,23 @@ export const Post = (props) => {
             className={classes.grid}
         >
             <Grid item xs={6}>
-                <div
-                    className={classes.root}
+                <div 
+                className={classes.root}
                 >
                     <List component="nav">
-                        {posts && Array.isArray(posts) && posts.length > 0 && posts.map((post, id) => (
+                        {post && Array.isArray(post) && post.length > 0 && post.map((post, id) => (
                             <div key={id}>
                                 <ListItem
                                     button
                                     divider
-                                    onClick={(e) => navigate(`/details/${post.id}`)}
+                                    onClick={(e) => console.log(e)}
                                 >
                                     <ListItemText
                                         primary={post.title}
                                         secondary={"Id: " + post.id}
+                                    />
+                                                  <ListItemText
+                                        primary={post.body}
                                     />
                                 </ListItem>
                             </div>
@@ -104,5 +109,10 @@ export const Post = (props) => {
                 </div>
             </Grid>
         </Grid>
+        <div>
+            Comments
+        </div>
+        <Comments id={id}/>
+        </>
     )
 }

@@ -4,7 +4,10 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { makeStyles } from '@mui/styles';
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import TextField from '@mui/material/TextField';
+import { Button } from "@mui/material";
+
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -34,11 +37,10 @@ const useStyles = makeStyles((theme) => {
 });
 
 
-export const Post = (props) => {
-    const [posts, setPosts] = useState([])
+export const CommentInput = (props) => {
+    const [comment, setComment] = useState('')
+    const {id, mycomment} = props
     const classes = useStyles({});
-    let navigate = useNavigate();
-
 
     async function fetchPosts() {
         let header = new Headers({
@@ -50,18 +52,17 @@ export const Post = (props) => {
             header: header
         };
         try {
-            let res = await fetch("https://jsonplaceholder.typicode.com/posts/", sendData)
+            let res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`, sendData)
             res = await res.json()
-            setPosts(res)
+            // setComments(res)
         } catch (e) {
             handleErrors(e)
         }
     }
 
     useEffect(() => {
-        console.log("inside")
-        fetchPosts()
-    }, [])
+        setComment(mycomment)
+    }, [mycomment])
 
 
 
@@ -73,36 +74,11 @@ export const Post = (props) => {
         return response;
     }
     return (
-        <Grid
-            container
-            direction="row"
-            justify="center"
-            alignItems="baseline"
-            spacing={24}
-            className={classes.grid}
-        >
-            <Grid item xs={6}>
-                <div
-                    className={classes.root}
+                <div 
+                className={classes.root}
                 >
-                    <List component="nav">
-                        {posts && Array.isArray(posts) && posts.length > 0 && posts.map((post, id) => (
-                            <div key={id}>
-                                <ListItem
-                                    button
-                                    divider
-                                    onClick={(e) => navigate(`/details/${post.id}`)}
-                                >
-                                    <ListItemText
-                                        primary={post.title}
-                                        secondary={"Id: " + post.id}
-                                    />
-                                </ListItem>
-                            </div>
-                        ))}
-                    </List>
+                <TextField fullWidth id="standard-basic" label="Standard" variant="standard" value={comment} onChange={(e)=> setComment(e.target.value)} />
+                <Button title="submit" onClick={(e)=> console.log(e)}/>
                 </div>
-            </Grid>
-        </Grid>
     )
 }

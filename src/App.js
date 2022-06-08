@@ -4,6 +4,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Post } from './pages/Post';
+import { Details } from './pages/Details';
 
 import { makeStyles } from '@mui/styles';
 
@@ -32,6 +33,7 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route exact path="/" element={<Post/>} />
+              <Route exact path="/details/:id" element={<Details/>} />
             </Routes>
           </BrowserRouter>
         </div>
