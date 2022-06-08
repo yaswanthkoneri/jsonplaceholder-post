@@ -74,11 +74,15 @@ export const CommentInput = (props) => {
         return response;
     }
     return (
+        <>
                 <div 
                 className={classes.root}
                 >
-                <TextField fullWidth id="standard-basic" label="Standard" variant="standard" value={comment} onChange={(e)=> setComment(e.target.value)} />
-                <Button title="submit" onClick={(e)=> console.log(e)}/>
+                <TextField fullWidth id="standard-basic" label="Standard" variant="standard" value={comment} onChange={(e)=> {
+                    setComment(e.target.value)
+                    props.onEditComment(e.target.value)
+                }} />
                 </div>
+                </>
     )
 }

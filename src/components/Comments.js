@@ -7,6 +7,8 @@ import { makeStyles } from '@mui/styles';
 import { useParams } from "react-router-dom";
 import { CommentInput } from "./CommentInput";
 import EditIcon from '@mui/icons-material/Edit';
+import Delete from '@mui/icons-material/Delete';
+import { Button } from "@mui/material";
 
 
 const useStyles = makeStyles((theme) => {
@@ -39,7 +41,7 @@ const useStyles = makeStyles((theme) => {
 
 export const Comments = (props) => {
     const [comments, setComments] = useState([])
-    const [isEdit, setIsEdit] = useState(false)
+    const [editedComment, setEditedComment] = useState('')
     const { id } = props
     const classes = useStyles({});
 
@@ -55,7 +57,7 @@ export const Comments = (props) => {
         try {
             let res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`, sendData)
             res = await res.json()
-            setComments(res.map((e)=> ({editing: false, ...e})))
+            setComments(res.map((e) => ({ editing: false, ...e })))
         } catch (e) {
             handleErrors(e)
         }
@@ -95,17 +97,37 @@ export const Comments = (props) => {
                             {!comment.editing && <ListItemText
                                 primary={comment.body}
                             />}
-                            <EditIcon onClick={(e)=> {
-                                const mod = [...comments].map((e)=> {
+                            <EditIcon onClick={(e) => {
+                                const mod = [...comments].map((e) => {
                                     if (e.id === comment.id) {
-                                        return {...e, editing: true}
+                                        return { ...e, editing: true }
                                     } else {
                                         return e
                                     }
                                 })
-                               setComments(mod)
-                            }}/>
-                            {comment.editing && <CommentInput mycomment={comment.body}/>}
+                                setComments(mod)
+                            }} />
+                            <Delete onClick={(e) => {
+                                const mod = [...comments].filter((e) => {
+                                    if (e.id !== comment.id) {
+                                        return e
+                                    }
+                                })
+                                setComments(mod)
+                            }} />
+                            {comment.editing && <CommentInput mycomment={comment.body} onEditComment={(e) => {
+                                setEditedComment(e)
+                            }} />}
+                            {comment.editing && <Button title="Save" onClick={(e) => {
+                                const mod = [...comments].map((e) => {
+                                    if (e.id === comment.id) {
+                                        return { ...e, body: editedComment, editing: false }
+                                    } else {
+                                        return e
+                                    }
+                                })
+                                setComments(mod)
+                            }}> Save </Button>}
                         </ListItem>
                     </div>
                 ))}
