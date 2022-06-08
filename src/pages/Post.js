@@ -11,6 +11,8 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+import EditIcon from '@mui/icons-material/Edit';
+import Delete from '@mui/icons-material/Delete';
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -79,21 +81,31 @@ export const Post = (props) => {
     }
     return (
 
-        <Paper style={{maxHeight: 725, overflow: 'auto', display: 'flex', justifyContent:'center'}} elevation={3}>
-                    <List component="nav">
-                        {posts && Array.isArray(posts) && posts.length > 0 && posts.map((post, id) => (
-                              <Card onClick={(e) => navigate(`/details/${post.id}`)} sx={{ maxWidth: 400, marginTop: 5 }}>
-                              <CardContent>
-                                <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
-                                 {post.id} - {post.title}
-                                </Typography>
-                                <Typography paragraph color="text.secondary">
-                                  {post.body}
-                                </Typography>
-                              </CardContent>
-                              </Card>
-                        ))}
-                    </List>
-                </Paper>
+        <Paper style={{ maxHeight: 725, overflow: 'auto', display: 'flex', justifyContent: 'center' }} elevation={3}>
+            <List component="nav">
+                {posts && Array.isArray(posts) && posts.length > 0 && posts.map((post, id) => (
+                    <Card onClick={(e) => navigate(`/details/${post.id}`)} sx={{ maxWidth: 400, marginTop: 5 }}>
+                        <CardContent>
+                            <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                                <div>
+                            <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
+                                {post.id} - {post.title}
+                            </Typography>
+                            </div>
+                            <div>
+                            <EditIcon onClick={(e) => {
+                                }} />
+                                <Delete onClick={(e) => {
+                                }} />
+                                </div>
+                                </div>
+                            <Typography paragraph color="text.secondary">
+                                {post.body}
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                ))}
+            </List>
+        </Paper>
     )
 }

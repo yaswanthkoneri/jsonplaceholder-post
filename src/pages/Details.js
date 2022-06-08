@@ -81,7 +81,7 @@ export const Details = (props) => {
     }
     return (
         <div>
-        <Paper style={{maxHeight: 725, overflow: 'auto', display: 'flex', justifyContent:'center'}} elevation={3}>
+        <Paper style={{maxHeight: 725, overflow: 'auto', display: 'flex', justifyContent:'center', flexDirection: 'column'}} elevation={3}>
                     <List component="nav">
                         {post && Array.isArray(post) && post.length > 0 && post.map((post, id) => (
                                        <Card sx={{ maxWidth: 600, marginTop: 5 }}>
