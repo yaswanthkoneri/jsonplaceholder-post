@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => {
 });
 
 
-export const Details = (props) => {
+export const Details = ({role}) => {
     const [post, setPost] = useState([])
     const {id} = useParams();
     const classes = useStyles({});
@@ -66,7 +66,6 @@ export const Details = (props) => {
     }
 
     useEffect(() => {
-        console.log("inside")
         fetchPosts()
     }, [id])
 
@@ -96,10 +95,7 @@ export const Details = (props) => {
                                        </Card>
                         ))}
                     </List>
-        {/* <div>
-            Comments
-        </div> */}
-        <Comments id={id}/>
+        <Comments id={id} role={role}/>
         </Paper>
         </div>
     )

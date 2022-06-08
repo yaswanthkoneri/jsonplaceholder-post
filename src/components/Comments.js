@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => {
 export const Comments = (props) => {
     const [comments, setComments] = useState([])
     const [editedComment, setEditedComment] = useState('')
-    const { id } = props
+    const { id, role } = props
     const classes = useStyles({});
 
     async function fetchComments() {
@@ -78,7 +78,7 @@ export const Comments = (props) => {
         return response;
     }
     return (
-        <Paper style={{maxHeight: 725, overflow: 'auto', display: 'flex', justifyContent:'center'}} elevation={3}>
+        <Paper style={{ maxHeight: 725, overflow: 'auto', display: 'flex', justifyContent: 'center' }} elevation={3}>
             <List component="nav">
                 {comments && Array.isArray(comments) && comments.length > 0 && comments.map((comment, id) => (
                     <div key={id}>
@@ -94,24 +94,26 @@ export const Comments = (props) => {
                             {!comment.editing && <ListItemText
                                 primary={comment.body}
                             />}
-                            <EditIcon onClick={(e) => {
-                                const mod = [...comments].map((e) => {
-                                    if (e.id === comment.id) {
-                                        return { ...e, editing: true }
-                                    } else {
-                                        return e
-                                    }
-                                })
-                                setComments(mod)
-                            }} />
-                            <Delete onClick={(e) => {
-                                const mod = [...comments].filter((e) => {
-                                    if (e.id !== comment.id) {
-                                        return e
-                                    }
-                                })
-                                setComments(mod)
-                            }} />
+                            {role === 'admin' && <div>
+                                <EditIcon onClick={(e) => {
+                                    const mod = [...comments].map((e) => {
+                                        if (e.id === comment.id) {
+                                            return { ...e, editing: true }
+                                        } else {
+                                            return e
+                                        }
+                                    })
+                                    setComments(mod)
+                                }} />
+                                <Delete onClick={(e) => {
+                                    const mod = [...comments].filter((e) => {
+                                        if (e.id !== comment.id) {
+                                            return e
+                                        }
+                                    })
+                                    setComments(mod)
+                                }} />
+                            </div>}
                             {comment.editing && <CommentInput mycomment={comment.body} onEditComment={(e) => {
                                 setEditedComment(e)
                             }} />}

@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import { makeStyles } from '@mui/styles';
 import { useNavigate } from "react-router-dom";
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -11,38 +7,13 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-
-const useStyles = makeStyles((theme) => {
-    return {
-        root: {
-            width: "100%",
-            backgroundColor: 'grey'
-        },
-        grid: {
-            margin: 0,
-            width: "100%",
-            backgroundColor: 'grey'
-        },
-        media: {
-            height: 0,
-            paddingTop: "56.25%" // 16:9
-        },
-        actions: {
-            display: "flex"
-        },
-        icon: {
-            margin: 0
-        },
-        card: {
-            width: "100%"
-        }
-    }
-});
+import EditIcon from '@mui/icons-material/Edit';
+import Delete from '@mui/icons-material/Delete';
+import '../App.css'
 
 
-export const Post = (props) => {
+export const Post = ({role}) => {
     const [posts, setPosts] = useState([])
-    const classes = useStyles({});
     let navigate = useNavigate();
 
 
@@ -66,9 +37,20 @@ export const Post = (props) => {
 
     useEffect(() => {
         fetchPosts()
-    }, [])
+    }, [])// eslint-disable-line react-hooks/exhaustive-deps
+    
+    async function deleteHandler(id) {
+        try {
+            await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+                method: 'DELETE'
+            })
+            setPosts(posts.filter((e) => e.id !== id))
 
-
+            }
+        catch (e) {
+            handleErrors(e)
+        }
+    }
 
     function handleErrors(response) {
         if (!response.ok) {
@@ -79,21 +61,26 @@ export const Post = (props) => {
     }
     return (
 
-        <Paper style={{maxHeight: 725, overflow: 'auto', display: 'flex', justifyContent:'center'}} elevation={3}>
-                    <List component="nav">
-                        {posts && Array.isArray(posts) && posts.length > 0 && posts.map((post, id) => (
-                              <Card onClick={(e) => navigate(`/details/${post.id}`)} sx={{ maxWidth: 400, marginTop: 5 }}>
-                              <CardContent>
-                                <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
-                                 {post.id} - {post.title}
-                                </Typography>
-                                <Typography paragraph color="text.secondary">
-                                  {post.body}
-                                </Typography>
-                              </CardContent>
-                              </Card>
-                        ))}
-                    </List>
-                </Paper>
+        <Paper style={{ maxHeight: 725, overflow: 'auto', display: 'flex', justifyContent: 'center' }} elevation={3}>
+            <List component="nav">
+                {posts && Array.isArray(posts) && posts.length > 0 && posts.map((post, id) => (
+                    <Card sx={{ maxWidth: 400, marginTop: 5 }}>
+                        <CardContent onClick={(e) => navigate(`/details/${post.id}`)}>
+                            <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
+                                {post.id} - {post.title}
+                            </Typography>
+                            <Typography paragraph color="text.secondary">
+                                {post.body}
+                            </Typography>
+                        </CardContent>
+                     {role==='admin' && <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
+                            <Button className="button"> <EditIcon onClick={(e) => navigate(`/edit-post/${post.id}`)}/></Button>
+                            <Button className="button"><Delete onClick={() => deleteHandler(post.id)} /></Button>
+                        </CardActions>}
+
+                    </Card>
+                ))}
+            </List>
+        </Paper>
     )
 }

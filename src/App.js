@@ -5,22 +5,25 @@ import Typography from '@mui/material/Typography';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Post } from './pages/Post';
 import { Details } from './pages/Details';
-
 import { makeStyles } from '@mui/styles';
-
+import { EditPosts } from './components/EditPosts';
+import Login from './pages/login';
+import { Button } from '@mui/material';
+import ProtectedRoute from './ProtectedRoute';
 
 const useStyles = makeStyles((theme) => {
-    return {
-        root: {
-            width: "100%",
-            backgroundColor: 'blue'
-        }
+  return {
+    root: {
+      width: "100%",
+      backgroundColor: 'blue',
     }
+  }
 });
 
 
 function App() {
   const classes = useStyles({})
+  const role = localStorage.getItem('role')
   return (
     <div className="App">
       <AppBar position="fixed">
@@ -28,12 +31,19 @@ function App() {
           <Typography variant="title" color="inherit">
             JSON Placeholder Post List
           </Typography>
+          {role && <Typography sx={{ml:'220px',cursor:'pointer'}} variant="title" color="inherit" onClick={() => {
+            localStorage.removeItem('role')
+            window.location.reload(false);
+          }}>Logout</Typography>}
         </Toolbar>
         <div>
           <BrowserRouter>
             <Routes>
-              <Route exact path="/" element={<Post/>} />
-              <Route exact path="/details/:id" element={<Details/>} />
+              <Route exact path="/login" element={<Login />} />
+              <Route exact path="/admin-login" element={<Login />} />
+              <Route path="/" element={<ProtectedRoute component={Post} role={role} />} exact />
+              <Route path="/details/:id" element={<ProtectedRoute component={Details} role={role} />} exact />
+              <Route path="/edit-post/:id" element={<ProtectedRoute component={EditPosts} role={role} />} exact />
             </Routes>
           </BrowserRouter>
         </div>
