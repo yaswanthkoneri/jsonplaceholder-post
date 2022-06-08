@@ -5,6 +5,12 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { makeStyles } from '@mui/styles';
 import { useNavigate } from "react-router-dom";
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -59,7 +65,6 @@ export const Post = (props) => {
     }
 
     useEffect(() => {
-        console.log("inside")
         fetchPosts()
     }, [])
 
@@ -73,36 +78,22 @@ export const Post = (props) => {
         return response;
     }
     return (
-        <Grid
-            container
-            direction="row"
-            justify="center"
-            alignItems="baseline"
-            spacing={24}
-            className={classes.grid}
-        >
-            <Grid item xs={6}>
-                <div
-                    className={classes.root}
-                >
+
+        <Paper style={{maxHeight: 725, overflow: 'auto', display: 'flex', justifyContent:'center'}} elevation={3}>
                     <List component="nav">
                         {posts && Array.isArray(posts) && posts.length > 0 && posts.map((post, id) => (
-                            <div key={id}>
-                                <ListItem
-                                    button
-                                    divider
-                                    onClick={(e) => navigate(`/details/${post.id}`)}
-                                >
-                                    <ListItemText
-                                        primary={post.title}
-                                        secondary={"Id: " + post.id}
-                                    />
-                                </ListItem>
-                            </div>
+                              <Card onClick={(e) => navigate(`/details/${post.id}`)} sx={{ maxWidth: 400, marginTop: 5 }}>
+                              <CardContent>
+                                <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
+                                 {post.id} - {post.title}
+                                </Typography>
+                                <Typography paragraph color="text.secondary">
+                                  {post.body}
+                                </Typography>
+                              </CardContent>
+                              </Card>
                         ))}
                     </List>
-                </div>
-            </Grid>
-        </Grid>
+                </Paper>
     )
 }
