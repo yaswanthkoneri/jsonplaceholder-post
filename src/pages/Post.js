@@ -27,7 +27,7 @@ export const Post = ({role}) => {
             header: header
         };
         try {
-            let res = await axios.get(`http://localhost:3000/posts`,sendData)
+            let res = await axios.get(`${process.env.REACT_APP_API_URL}/posts`,sendData)
             setPosts(res.data)
         } catch (e) {
             handleErrors(e)
@@ -40,7 +40,7 @@ export const Post = ({role}) => {
     
     async function deleteHandler(id) {
         try {
-            await axios.delete(`http://localhost:3000/posts/${id}`)
+            await axios.delete(`${process.env.REACT_APP_API_URL}/posts/${id}`)
             setPosts(posts.filter((e) => e.id !== id))
             }
         catch (e) {

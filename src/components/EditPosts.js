@@ -44,7 +44,7 @@ export const EditPosts = (props) => {
             header: header
         };
         try {
-            await axios.put(`http://localhost:3000/posts/${id}`, post)
+            await axios.put(`${process.env.REACT_APP_API_URL}/posts/${id}`, post)
             navigate('/')
 
         } catch (e) {
@@ -62,7 +62,7 @@ export const EditPosts = (props) => {
             header: header
         };
         try {
-            let res = await axios.get(`http://localhost:3000/posts/${id}`,sendData)
+            let res = await axios.get(`${process.env.REACT_APP_API_URL}/posts/${id}`,sendData)
             setPost(res.data)
 
         } catch (e) {

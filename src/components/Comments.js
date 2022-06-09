@@ -56,7 +56,7 @@ export const Comments = (props) => {
             header: header
         };
         try {
-            let res = await axios.get(`http://localhost:3000/posts/${id}/comments`, sendData)
+            let res = await axios.get(`${process.env.REACT_APP_API_URL}/posts/${id}/comments`, sendData)
             setComments(res.data.map((e) => ({ editing: false, ...e })))
         } catch (e) {
             handleErrors(e)
@@ -74,7 +74,7 @@ export const Comments = (props) => {
             body: JSON.stringify(data)
         };
         try {
-           let res =  await axios.put(`http://localhost:3000/comments/${data.id}`, data)
+           let res =  await axios.put(`${process.env.REACT_APP_API_URL}/comments/${data.id}`, data)
             return res.data
         } catch (e) {
             handleErrors(e)
@@ -83,7 +83,7 @@ export const Comments = (props) => {
 
     async function deleteComments(id) {
         try {
-            await axios.delete(`http://localhost:3000/comments/${id}`)
+            await axios.delete(`${process.env.REACT_APP_API_URL}/comments/${id}`)
         } catch (e) {
             handleErrors(e)
         }
@@ -92,7 +92,7 @@ export const Comments = (props) => {
 
     useEffect(() => {
         fetchComments()
-    }, [id])
+    }, [])
 
 
 
