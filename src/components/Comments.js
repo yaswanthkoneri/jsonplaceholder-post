@@ -70,10 +70,11 @@ export const Comments = (props) => {
         });
         let sendData = {
             mode: 'cors',
-            header: header
+            header: header,
+            body: JSON.stringify(data)
         };
         try {
-           let res =  await axios.put(`http://localhost:3000/comments/${id}`, sendData)
+           let res =  await axios.put(`http://localhost:3000/comments/${data.id}`, data)
             return res.data
         } catch (e) {
             handleErrors(e)
@@ -140,8 +141,8 @@ export const Comments = (props) => {
                                 setEditedComment(e)
                             }} />}
                             {comment.editing && <Button title="Save" onClick={(e) => {
-                                let {editing, postId, ...rest} = { ...comments.find(e => e.id === comment.id), body: editedComment}
-                                editComments({body: rest.body, id: rest.id})
+                                let {editing, ...rest} = { ...comments.find(e => e.id === comment.id), body: editedComment}
+                                editComments(rest)
                                 const mod = [...comments].map((e) => {
                                     if (e.id === comment.id) {
                                         return { ...e, body: editedComment, editing: false }
