@@ -12,7 +12,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -57,9 +57,8 @@ export const Details = ({role}) => {
             header: header
         };
         try {
-            let res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, sendData)
-            res = await res.json()
-            setPost([res])
+            let res = await axios.get(`https://jsonplaceholder.typicode.com/posts/${id}`, sendData)
+            setPost([res.data])
         } catch (e) {
             handleErrors(e)
         }
@@ -73,7 +72,6 @@ export const Details = ({role}) => {
 
     function handleErrors(response) {
         if (!response.ok) {
-            console.error(response);
             throw Error(response.statusText);
         }
         return response;

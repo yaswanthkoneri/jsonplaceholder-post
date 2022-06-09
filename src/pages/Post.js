@@ -10,7 +10,7 @@ import Paper from '@mui/material/Paper';
 import EditIcon from '@mui/icons-material/Edit';
 import Delete from '@mui/icons-material/Delete';
 import '../App.css'
-
+import axios from 'axios'
 
 export const Post = ({role}) => {
     const [posts, setPosts] = useState([])
@@ -27,9 +27,8 @@ export const Post = ({role}) => {
             header: header
         };
         try {
-            let res = await fetch("http://localhost:3000/posts/", sendData)
-            res = await res.json()
-            setPosts(res)
+            let res = await axios.get(`http://localhost:3000/posts`,sendData)
+            setPosts(res.data)
         } catch (e) {
             handleErrors(e)
         }
@@ -41,11 +40,8 @@ export const Post = ({role}) => {
     
     async function deleteHandler(id) {
         try {
-            await fetch(`http://localhost:3000/posts/${id}`, {
-                method: 'DELETE'
-            })
+            await axios.delete(`http://localhost:3000/posts/${id}`)
             setPosts(posts.filter((e) => e.id !== id))
-
             }
         catch (e) {
             handleErrors(e)
@@ -54,7 +50,6 @@ export const Post = ({role}) => {
 
     function handleErrors(response) {
         if (!response.ok) {
-            console.error(response);
             throw Error(response.statusText);
         }
         return response;

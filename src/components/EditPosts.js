@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios'
 
 
 const useStyles = makeStyles((theme) => {
@@ -43,9 +44,7 @@ export const EditPosts = (props) => {
             header: header
         };
         try {
-            await fetch(`http://localhost:3000/posts/${id}`, {
-                method: 'PUT', sendData, body: JSON.stringify(post)
-            })
+            await axios.put(`http://localhost:3000/posts/${id}`, post)
             navigate('/')
 
         } catch (e) {
@@ -63,9 +62,8 @@ export const EditPosts = (props) => {
             header: header
         };
         try {
-            let res = await fetch(`http://localhost:3000/posts/${id}`, sendData)
-            res = await res.json()
-            setPost(res)
+            let res = await axios.get(`http://localhost:3000/posts/${id}`,sendData)
+            setPost(res.data)
 
         } catch (e) {
             handleErrors(e)

@@ -10,7 +10,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import Delete from '@mui/icons-material/Delete';
 import { Button } from "@mui/material";
 import Paper from '@mui/material/Paper';
-
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -56,9 +56,8 @@ export const Comments = (props) => {
             header: header
         };
         try {
-            let res = await fetch(`http://localhost:3000/posts/${id}/comments`, sendData)
-            res = await res.json()
-            setComments(res.map((e) => ({ editing: false, ...e })))
+            let res = await axios.get(`http://localhost:3000/posts/${id}/comments`, sendData)
+            setComments(res.data.map((e) => ({ editing: false, ...e })))
         } catch (e) {
             handleErrors(e)
         }
@@ -74,29 +73,16 @@ export const Comments = (props) => {
             header: header
         };
         try {
-           let res = await fetch(`http://localhost:3000/comments/${data.id}`, {
-                method: 'PUT', sendData, body: JSON.stringify(data)
-            })
-            res = await res.json()
-            return res
+           let res =  await axios.put(`http://localhost:3000/comments/${id}`, sendData)
+            return res.data
         } catch (e) {
             handleErrors(e)
         }
     }
 
     async function deleteComments(id) {
-        let header = new Headers({
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'multipart/form-data'
-        });
-        let sendData = {
-            mode: 'cors',
-            header: header,
-            method:'DELETE'
-        };
         try {
-            let res = await fetch(`http://localhost:3000/comments/${id}`, sendData)
-            res = await res.json()
+            await axios.delete(`http://localhost:3000/comments/${id}`)
         } catch (e) {
             handleErrors(e)
         }
@@ -111,7 +97,6 @@ export const Comments = (props) => {
 
     function handleErrors(response) {
         if (!response.ok) {
-            console.error(response);
             throw Error(response.statusText);
         }
         return response;
