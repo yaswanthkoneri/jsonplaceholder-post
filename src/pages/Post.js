@@ -27,7 +27,7 @@ export const Post = ({role}) => {
             header: header
         };
         try {
-            let res = await fetch("https://jsonplaceholder.typicode.com/posts/", sendData)
+            let res = await fetch("http://localhost:3000/posts/", sendData)
             res = await res.json()
             setPosts(res)
         } catch (e) {
@@ -41,7 +41,7 @@ export const Post = ({role}) => {
     
     async function deleteHandler(id) {
         try {
-            await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+            await fetch(`http://localhost:3000/posts/${id}`, {
                 method: 'DELETE'
             })
             setPosts(posts.filter((e) => e.id !== id))

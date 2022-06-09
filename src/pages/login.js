@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme) => {
         input: {
             width: '400px',
             margin: '15px'
+        },
+        button: {
+            backgroundColor: 'blue',
+
         }
     }
 });
@@ -48,7 +52,7 @@ export default function Login() {
     const loginValidator = () => {
         let formErrors = {
             email: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(loginData.email) ? "" : 'Please enter a valid Email',//eslint-disable-line
-            password: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(loginData.password) ? "" : 'Invalid password, password must contain 8 characters and include one lowercase, one uppercase, one number'
+            // password: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(loginData.password) ? "" : 'Invalid password, password must contain 8 characters and include one lowercase, one uppercase, one number'
         }
         setLoginErrors(formErrors)
         return Object.values(formErrors).every(x => x === '')
@@ -68,7 +72,7 @@ export default function Login() {
         if (loginValidator()) {
             if(role==='admin'){
             if (loginData.email === 'test@gmail.com') {
-                if (loginData.password === 'Codeunity1') {
+                if (loginData.password === 'test') {
                     localStorage.setItem('role', 'admin');
                    window.location.reload(false)
                 }
@@ -82,7 +86,7 @@ export default function Login() {
         }
         else{
             if (loginData.email === 'test1@gmail.com') {
-                if (loginData.password === 'Codeunity1') {
+                if (loginData.password === 'test') {
                     localStorage.setItem('role', 'user');
                     window.location.reload(false)
 
@@ -120,13 +124,13 @@ export default function Login() {
                 </div>
             </Box>
             <div className='btnContainer'>
-                <Button className='button' onClick={submitdata}>Login</Button>
+                <Button color='primary' variant="contained" className={classes.button} onClick={submitdata}>Login</Button>
             </div>
 
             <div className='btnContainer'>
                 {role === 'user' ?
-                    <Button variant="text" className='button' onClick={roleHandler}>Login as Admin</Button> :
-                    <Button variant="text" className='button' onClick={roleHandler}>Login as User</Button>}
+                    <Button variant="contained" color='primary' className={classes.button} onClick={roleHandler}>Login as Admin</Button> :
+                    <Button variant="contained" color='primary' className={classes.button} onClick={roleHandler}>Login as User</Button>}
             </div>
         </div>
     );

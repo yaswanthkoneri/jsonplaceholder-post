@@ -43,7 +43,7 @@ export const EditPosts = (props) => {
             header: header
         };
         try {
-            await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+            await fetch(`http://localhost:3000/posts/${id}`, {
                 method: 'PUT', sendData, body: JSON.stringify(post)
             })
             navigate('/')
@@ -63,7 +63,7 @@ export const EditPosts = (props) => {
             header: header
         };
         try {
-            let res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, sendData)
+            let res = await fetch(`http://localhost:3000/posts/${id}`, sendData)
             res = await res.json()
             setPost(res)
 

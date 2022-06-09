@@ -56,13 +56,52 @@ export const Comments = (props) => {
             header: header
         };
         try {
-            let res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`, sendData)
+            let res = await fetch(`http://localhost:3000/posts/${id}/comments`, sendData)
             res = await res.json()
             setComments(res.map((e) => ({ editing: false, ...e })))
         } catch (e) {
             handleErrors(e)
         }
     }
+
+    async function editComments(data) {
+        let header = new Headers({
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'multipart/form-data'
+        });
+        let sendData = {
+            mode: 'cors',
+            header: header
+        };
+        try {
+           let res = await fetch(`http://localhost:3000/comments/${data.id}`, {
+                method: 'PUT', sendData, body: JSON.stringify(data)
+            })
+            res = await res.json()
+            return res
+        } catch (e) {
+            handleErrors(e)
+        }
+    }
+
+    async function deleteComments(id) {
+        let header = new Headers({
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'multipart/form-data'
+        });
+        let sendData = {
+            mode: 'cors',
+            header: header,
+            method:'DELETE'
+        };
+        try {
+            let res = await fetch(`http://localhost:3000/comments/${id}`, sendData)
+            res = await res.json()
+        } catch (e) {
+            handleErrors(e)
+        }
+    }
+
 
     useEffect(() => {
         fetchComments()
@@ -104,20 +143,20 @@ export const Comments = (props) => {
                                         }
                                     })
                                     setComments(mod)
+                                    // fetchComments()
+
                                 }} />
                                 <Delete onClick={(e) => {
-                                    const mod = [...comments].filter((e) => {
-                                        if (e.id !== comment.id) {
-                                            return e
-                                        }
-                                    })
-                                    setComments(mod)
+                                  deleteComments(comment.id)
+                                  fetchComments()
                                 }} />
                             </div>}
                             {comment.editing && <CommentInput mycomment={comment.body} onEditComment={(e) => {
                                 setEditedComment(e)
                             }} />}
                             {comment.editing && <Button title="Save" onClick={(e) => {
+                                let {editing, postId, ...rest} = { ...comments.find(e => e.id === comment.id), body: editedComment}
+                                editComments({body: rest.body, id: rest.id})
                                 const mod = [...comments].map((e) => {
                                     if (e.id === comment.id) {
                                         return { ...e, body: editedComment, editing: false }
